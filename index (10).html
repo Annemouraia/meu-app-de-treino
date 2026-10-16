@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Meu App de Treino</title>
+<meta name="theme-color" content="#050705">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Meu Treino">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#050705;--surface:#101410;--ink:#EEFFEA;--muted:#8FA38C;--line:#1E2A1D;
+  --accent:#39FF14;--soft:#102A0C;--water:#00E5A0;--soft-water:#0B2A20;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#050705;--surface:#101410;--ink:#EEFFEA;--muted:#8FA38C;--line:#1E2A1D;
+    --accent:#39FF14;--soft:#102A0C;--water:#00E5A0;--soft-water:#0B2A20;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#050705;--surface:#101410;--ink:#EEFFEA;--muted:#8FA38C;--line:#1E2A1D;
+  --accent:#39FF14;--soft:#102A0C;--water:#00E5A0;--soft-water:#0B2A20;color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:16px/1.45 'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
+main{max-width:560px;margin:0 auto;padding:18px 16px 110px}
+h1,h2{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;letter-spacing:-.02em}
+h1{font-size:32px;line-height:1.1;margin:6px 0 4px;font-weight:800}
+h2{font-size:18px;margin:0 0 10px;font-weight:700}
+.sub{color:var(--muted);margin:0 0 18px}
+.muted{color:var(--muted);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:14px}
+.row{display:flex;gap:8px;align-items:flex-end}
+.row>.grow{flex:1;min-width:0}
+.mt{margin-top:12px}
+label{display:block;font-size:13px;color:var(--muted);margin:0 0 4px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;min-width:0}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,label.btn:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:11px 14px;background:var(--accent);color:#031200;box-shadow:0 0 16px rgba(57,255,20,.28);cursor:pointer;display:inline-block;text-align:center}
+.btn.alt{background:var(--soft);color:var(--accent);box-shadow:none}
+.btn.water{background:var(--soft-water);color:var(--water);box-shadow:none}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);box-shadow:none}
+.btn.sm{padding:7px 11px;font-size:14px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.vh{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{background:none;border:0;color:var(--muted);font:inherit;font-size:12px;padding:9px 0 7px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+nav button.on{color:var(--accent);font-weight:700}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.water-card{display:flex;gap:18px;align-items:center}
+.glass{flex:none;width:68px;height:126px;border:3px solid var(--water);border-top:0;border-radius:6px 6px 24px 24px;position:relative;overflow:hidden;background:var(--soft-water)}
+.glass i{position:absolute;left:0;right:0;bottom:0;background:var(--water);transition:height .5s ease}
+.big{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;line-height:1;letter-spacing:-.02em}
+.big small{font-size:16px;font-weight:600;color:var(--muted);letter-spacing:0}
+.bar{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin:8px 0 12px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:9px}
+.dots{display:flex;justify-content:space-between;margin:10px 0}
+.dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:13px;border:1px solid var(--line);color:var(--muted)}
+.dot.on{background:var(--accent);color:#031200;border-color:var(--accent);font-weight:700}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px}
+.chip{white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 13px;border-radius:99px;font:inherit;font-size:14px;cursor:pointer}
+.chip.on{background:var(--accent);color:#031200;border-color:var(--accent);font-weight:700}
+.item{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.x{background:none;border:0;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:2px 8px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.four{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.wk{display:flex;gap:8px;height:96px}
+.wkc{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.wkb{flex:1;width:100%;display:flex;align-items:flex-end;background:var(--bg);border-radius:8px;overflow:hidden}
+.wkb i{display:block;width:100%;background:var(--accent)}
+.wkc span{font-size:12px;color:var(--muted)}
+.stat{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.grid button{padding:0;border:0;border-radius:12px;overflow:hidden;aspect-ratio:3/4;background:var(--line);cursor:pointer;position:relative}
+.grid img,.cmp img{width:100%;height:100%;object-fit:cover;display:block}
+.grid em{position:absolute;left:0;right:0;bottom:0;font-style:normal;font-size:11px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.65));padding:12px 6px 4px;text-align:left}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cmp div{border-radius:14px;overflow:hidden;aspect-ratio:3/4;background:var(--line)}
+.cmp p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.back{position:fixed;inset:0;background:rgba(10,8,30,.62);display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));z-index:20}
+.sheet{background:var(--surface);color:var(--ink);border-radius:20px;max-width:520px;width:100%;max-height:100%;overflow:auto;padding:16px}
+.sheet img{width:100%;max-height:55vh;object-fit:contain;border-radius:12px;display:block;margin-bottom:12px;background:var(--bg)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:30;max-width:90%}
+#toast.show{opacity:1}
+svg.chart{width:100%;height:auto;display:block}
+.gl{stroke:var(--line);stroke-width:1}
+.ln{stroke:var(--accent);fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.pt{fill:var(--accent)}
+.tx{fill:var(--muted);font-size:10px}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+@media (prefers-reduced-motion:reduce){.glass i,#toast{transition:none}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<nav id="nav" aria-label="Seções">
+  <button data-tab="hoje"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 9.5V21h14V9.5"/></svg>Hoje</button>
+  <button data-tab="treino"><svg viewBox="0 0 24 24"><path d="M6 6v12M3 9v6M18 6v12M21 9v6M6 12h12"/></svg>Treinos</button>
+  <button data-tab="comida"><svg viewBox="0 0 24 24"><path d="M7 3v7a2 2 0 0 0 2 2v9M11 3v7M7 7h4M17 3c-2.5 2-3 5-3 8h3v10"/></svg>Comida</button>
+  <button data-tab="corpo"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Corpo</button>
+  <button data-tab="fotos"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Fotos</button>
+</nav>
+<div id="modal"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s){return document.querySelector(s)};
+var pad=function(n){return String(n).padStart(2,'0')};
+var ymd=function(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+var todayStr=function(){return ymd(new Date())};
+var fmtDate=function(s){var p=s.split('-');return p[2]+'/'+p[1]};
+var fmtFull=function(s){var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0]};
+var dow=function(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]).getDay()};
+var uid=function(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var num=function(v){var n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n};
+var fmt=function(n){return (+n).toLocaleString('pt-BR',{maximumFractionDigits:1})};
+var sum=function(a,f){return a.reduce(function(t,x){return t+(+f(x)||0)},0)};
+var cap=function(s){return s.charAt(0).toUpperCase()+s.slice(1)};
+
+/* ---------- dados ---------- */
+var KEY='meu-app-treino-v1';
+var S;
+function normalize(o){
+  if(!o||typeof o!=='object')o={};
+  o.goals=Object.assign({water:2500,kcal:2000,protein:120,week:4},o.goals||{});
+  o.water=o.water&&typeof o.water==='object'?o.water:{};
+  o.meals=Array.isArray(o.meals)?o.meals:[];
+  o.workouts=Array.isArray(o.workouts)?o.workouts:[];
+  o.body=Array.isArray(o.body)?o.body:[];
+  return o;
+}
+function load(){var o=null;try{o=JSON.parse(localStorage.getItem(KEY))}catch(e){}S=normalize(o)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Não foi possível salvar neste navegador')}}
+
+/* fotos em IndexedDB */
+var dbp=null,photos=[];
+function db(){
+  if(!dbp)dbp=new Promise(function(res,rej){
+    try{
+      var r=indexedDB.open('treino-fotos',1);
+      r.onupgradeneeded=function(){r.result.createObjectStore('photos',{keyPath:'id'})};
+      r.onsuccess=function(){res(r.result)};
+      r.onerror=function(){rej(r.error)};
+    }catch(e){rej(e)}
+  });
+  return dbp;
+}
+function idb(mode,fn){
+  return db().then(function(d){return new Promise(function(res,rej){
+    var tx=d.transaction('photos',mode);var q=fn(tx.objectStore('photos'));
+    tx.oncomplete=function(){res(q&&q.result)};tx.onerror=function(){rej(tx.error)};
+  })});
+}
+function loadPhotos(){
+  return idb('readonly',function(s){return s.getAll()}).then(function(r){photos=r||[]}).catch(function(){photos=[]});
+}
+function compress(file){
+  return new Promise(function(res,rej){
+    var img=new Image(),url=URL.createObjectURL(file);
+    img.onload=function(){
+      var k=Math.min(1,1000/Math.max(img.width,img.height));
+      var w=Math.round(img.width*k),h=Math.round(img.height*k);
+      var c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);res(c.toDataURL('image/jpeg',0.8));
+    };
+    img.onerror=function(){rej(new Error('img'))};
+    img.src=url;
+  });
+}
+
+/* ---------- estado de tela ---------- */
+var tab='hoje';
+var draft={title:'',date:todayStr(),exercises:[]};
+var mealDate=todayStr();
+var metric='weight';
+var pType='frente',pFilter='todas';
+var METRICS={weight:['Peso','kg'],fat:['Gordura','%'],muscle:['Massa muscular','kg'],waist:['Cintura','cm'],hip:['Quadril','cm'],arm:['Braço','cm'],thigh:['Coxa','cm']};
+var PTYPES={frente:'Frente',lado:'Lado',costas:'Costas',treino:'Treino',outra:'Outra'};
+var MEALS=['Café da manhã','Almoço','Lanche','Jantar','Outro'];
+
+function weekDates(){
+  var out=[],n=new Date();
+  for(var i=6;i>=0;i--)out.push(ymd(new Date(n.getFullYear(),n.getMonth(),n.getDate()-i)));
+  return out;
+}
+function bodySorted(){return S.body.slice().sort(function(a,b){return a.d.localeCompare(b.d)})}
+function series(m){return bodySorted().filter(function(b){return b[m]!=null}).map(function(b){return {d:b.d,v:b[m]}})}
+
+function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('show')},2200)}
+function showModal(html){$('#modal').innerHTML='<div class="back" data-act="closeM"><div class="sheet" role="dialog" aria-modal="true">'+html+'</div></div>'}
+function closeModal(){$('#modal').innerHTML=''}
+
+/* ---------- gráfico ---------- */
+function chart(pts){
+  if(pts.length<2)return '<p class="empty">Registre pelo menos duas medidas para ver o gráfico.</p>';
+  var W=320,H=170,L=38,R=10,T=12,B=24;
+  var ts=pts.map(function(p){return Date.parse(p.d+'T00:00:00')});
+  var t0=ts[0],t1=ts[ts.length-1];
+  var ys=pts.map(function(p){return p.v});
+  var lo=Math.min.apply(null,ys),hi=Math.max.apply(null,ys);
+  if(lo===hi){lo-=1;hi+=1}
+  var pd=(hi-lo)*.15;lo-=pd;hi+=pd;
+  var X=function(i){return L+(t1===t0?.5:(ts[i]-t0)/(t1-t0))*(W-L-R)};
+  var Y=function(v){return T+(1-(v-lo)/(hi-lo))*(H-T-B)};
+  var path=pts.map(function(p,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(p.v).toFixed(1)}).join(' ');
+  var grid=[0,.5,1].map(function(f){var v=lo+(hi-lo)*f,y=Y(v);
+    return '<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'"/><text class="tx" x="'+(L-6)+'" y="'+(y+3)+'" text-anchor="end">'+v.toFixed(1).replace('.',',')+'</text>'}).join('');
+  var dots=pts.map(function(p,i){return '<circle class="pt" cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="3.5"/>'}).join('');
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Gráfico de evolução">'+grid+'<path class="ln" d="'+path+'"/>'+dots+
+    '<text class="tx" x="'+L+'" y="'+(H-6)+'">'+fmtDate(pts[0].d)+'</text><text class="tx" x="'+(W-R)+'" y="'+(H-6)+'" text-anchor="end">'+fmtDate(pts[pts.length-1].d)+'</text></svg>';
+}
+
+/* ---------- telas ---------- */
+function vHoje(){
+  var t=todayStr(),g=S.goals,ml=S.water[t]||0;
+  var pct=Math.min(100,Math.round(ml/g.water*100));
+  var ms=S.meals.filter(function(m){return m.date===t});
+  var kcal=sum(ms,function(m){return m.kcal}),prot=sum(ms,function(m){return m.prot});
+  var wk=weekDates();
+  var done=0;
+  var dots=wk.map(function(d){
+    var n=S.workouts.some(function(w){return w.date===d});if(n)done++;
+    return '<div class="dot'+(n?' on':'')+'" title="'+fmtDate(d)+'">'+'DSTQQSS'.charAt(dow(d))+'</div>';
+  }).join('');
+  var ws=series('weight'),wl=ws[ws.length-1],wf=ws[0];
+  var fs=series('fat'),fl=fs[fs.length-1];
+  var long=cap(new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}));
+  var weightTxt=wl?'<div class="big">'+fmt(wl.v)+' <small>kg</small></div>'+
+    (ws.length>1?'<p class="muted" style="margin:6px 0 0">'+(wl.v-wf.v>0?'+':wl.v-wf.v<0?'−':'')+fmt(Math.abs(wl.v-wf.v))+' kg desde '+fmtDate(wf.d)+(fl?' · gordura '+fmt(fl.v)+'%':'')+'</p>':(fl?'<p class="muted" style="margin:6px 0 0">Gordura '+fmt(fl.v)+'%</p>':''))
+    :'<p class="empty">Nenhuma medida ainda.</p>';
+  return '<h1>Hoje</h1><p class="sub">'+long+'</p>'+
+  '<div class="card"><div class="water-card"><div class="glass" aria-hidden="true"><i style="height:'+pct+'%"></i></div>'+
+    '<div class="grow" style="flex:1"><h2>Água</h2><div class="big">'+fmt(ml)+' <small>/ '+fmt(g.water)+' ml</small></div>'+
+    '<p class="muted" style="margin:6px 0 10px">'+pct+'% da meta</p>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn water sm" data-act="water" data-ml="200">+200</button><button class="btn water sm" data-act="water" data-ml="300">+300</button><button class="btn water sm" data-act="water" data-ml="500">+500</button><button class="btn ghost sm" data-act="water" data-ml="-200" aria-label="Tirar 200 ml">−200</button></div></div></div></div>'+
+  '<div class="card"><h2>Comida</h2><div class="big">'+fmt(kcal)+' <small>/ '+fmt(g.kcal)+' kcal</small></div>'+
+    '<div class="bar"><i style="width:'+Math.min(100,kcal/g.kcal*100)+'%"></i></div>'+
+    '<div class="muted">Proteína: '+fmt(prot)+' / '+fmt(g.protein)+' g</div>'+
+    '<div class="bar"><i style="width:'+Math.min(100,prot/g.protein*100)+'%"></i></div>'+
+    '<button class="btn alt" data-tab="comida">Registrar refeição</button></div>'+
+  '<div class="card"><h2>Treinos na semana</h2><div class="dots">'+dots+'</div>'+
+    '<p class="muted" style="margin:0 0 12px">'+done+' de '+g.week+' dias com treino nos últimos 7 dias</p>'+
+    '<button class="btn alt" data-tab="treino">Registrar treino</button></div>'+
+  '<div class="card"><h2>Corpo</h2>'+weightTxt+'<div class="mt"><button class="btn alt" data-tab="corpo">Registrar medidas</button></div></div>'+
+  '<div class="card"><h2>Metas e backup</h2>'+
+    '<div class="four"><div><label for="g1">Água (ml/dia)</label><input id="g1" inputmode="numeric" data-goal="water" value="'+g.water+'"></div>'+
+    '<div><label for="g2">Calorias (kcal/dia)</label><input id="g2" inputmode="numeric" data-goal="kcal" value="'+g.kcal+'"></div>'+
+    '<div><label for="g3">Proteína (g/dia)</label><input id="g3" inputmode="numeric" data-goal="protein" value="'+g.protein+'"></div>'+
+    '<div><label for="g4">Treinos por semana</label><input id="g4" inputmode="numeric" data-goal="week" value="'+g.week+'"></div></div>'+
+    '<div class="btns"><button class="btn ghost sm" data-act="backup">Backup dos dados</button><button class="btn ghost sm" data-act="resetAll">Apagar tudo</button></div>'+
+    '<p class="muted" style="margin:10px 0 0">Tudo fica salvo neste aparelho, no navegador que você está usando.</p></div>';
+}
+
+function vTreino(){
+  var names={};S.workouts.forEach(function(w){w.exercises.forEach(function(e){names[e.name]=1})});
+  var hist=S.workouts.slice().sort(function(a,b){return b.date.localeCompare(a.date)||b.id.localeCompare(a.id)}).slice(0,30);
+  var opts=Object.keys(names).map(function(n){return '<option value="'+esc(n)+'">'}).join('');
+  var dl=draft.exercises.map(function(e,i){
+    return '<div class="item"><div><b>'+esc(e.name)+'</b><div class="muted">'+e.sets+' × '+e.reps+(e.kg?' · '+fmt(e.kg)+' kg':'')+'</div></div><button class="x" data-act="delEx" data-i="'+i+'" aria-label="Remover exercício">×</button></div>';
+  }).join('');
+  var hl=hist.length?hist.map(function(w){
+    return '<div class="item"><div><b>'+esc(w.title)+'</b> <span class="muted">'+fmtFull(w.date)+'</span>'+
+      w.exercises.map(function(e){return '<div class="muted">'+esc(e.name)+' — '+e.sets+' × '+e.reps+(e.kg?' · '+fmt(e.kg)+' kg':'')+'</div>'}).join('')+
+      '</div><button class="x" data-act="delW" data-id="'+w.id+'" aria-label="Excluir treino">×</button></div>';
+  }).join(''):'<p class="empty">Seus treinos salvos aparecem aqui.</p>';
+  return '<h1>Treinos</h1><p class="sub">Registre o que fez e acompanhe a carga.</p>'+
+  '<div class="card"><h2>Novo treino</h2>'+
+    '<div class="row"><div class="grow"><label for="wt">Nome do treino</label><input id="wt" data-draft="title" value="'+esc(draft.title)+'" placeholder="Ex.: Pernas e glúteos"></div>'+
+    '<div style="width:150px"><label for="wd">Data</label><input id="wd" type="date" data-draft="date" value="'+draft.date+'"></div></div>'+
+    '<div class="mt">'+dl+'</div>'+
+    '<div class="mt"><label for="en">Exercício</label><input id="en" list="exl" placeholder="Ex.: Agachamento livre" autocomplete="off"><datalist id="exl">'+opts+'</datalist></div>'+
+    '<div class="three mt"><div><label for="es">Séries</label><input id="es" inputmode="numeric" placeholder="3"></div><div><label for="er">Repetições</label><input id="er" inputmode="numeric" placeholder="12"></div><div><label for="ek">Carga (kg)</label><input id="ek" inputmode="decimal" placeholder="0"></div></div>'+
+    '<p id="hint" class="muted" style="margin:8px 0 0"></p>'+
+    '<div class="btns"><button class="btn alt" data-act="addEx">Adicionar exercício</button><button class="btn" data-act="saveW">Salvar treino</button></div></div>'+
+  '<div class="card"><h2>Histórico</h2>'+hl+'</div>';
+}
+
+function vComida(){
+  var ms=S.meals.filter(function(m){return m.date===mealDate}).sort(function(a,b){return a.time.localeCompare(b.time)});
+  var kcal=sum(ms,function(m){return m.kcal}),prot=sum(ms,function(m){return m.prot});
+  var wk=weekDates();
+  var tot=wk.map(function(d){return sum(S.meals.filter(function(m){return m.date===d}),function(m){return m.kcal})});
+  var mx=Math.max.apply(null,tot.concat([S.goals.kcal,1]));
+  var bars=wk.map(function(d,i){return '<div class="wkc"><div class="wkb" title="'+fmt(tot[i])+' kcal"><i style="height:'+(tot[i]/mx*100)+'%"></i></div><span>'+'DSTQQSS'.charAt(dow(d))+'</span></div>'}).join('');
+  var list=ms.length?ms.map(function(m){
+    return '<div class="item"><div><b>'+esc(m.type)+'</b> <span class="muted">'+esc(m.time)+'</span><div>'+esc(m.name||'Sem descrição')+'</div><div class="muted">'+fmt(m.kcal||0)+' kcal · '+fmt(m.prot||0)+' g proteína</div></div><button class="x" data-act="delMeal" data-id="'+m.id+'" aria-label="Excluir refeição">×</button></div>';
+  }).join(''):'<p class="empty">Nenhuma refeição neste dia.</p>';
+  return '<h1>Comida</h1><p class="sub">Calorias e proteína de cada refeição.</p>'+
+  '<div class="card"><div class="row"><div class="grow"><h2 style="margin:0">Dia</h2></div><div style="width:160px"><label class="vh" for="md">Data</label><input id="md" type="date" data-mealdate="1" value="'+mealDate+'"></div></div>'+
+    '<div class="stat mt"><div><div class="big">'+fmt(kcal)+' <small>kcal</small></div></div><div><div class="big">'+fmt(prot)+' <small>g prot.</small></div></div></div>'+
+    '<div class="bar"><i style="width:'+Math.min(100,kcal/S.goals.kcal*100)+'%"></i></div>'+
+    '<p class="muted" style="margin:0">Meta: '+fmt(S.goals.kcal)+' kcal e '+fmt(S.goals.protein)+' g de proteína</p></div>'+
+  '<div class="card"><h2>Nova refeição</h2>'+
+    '<label for="mt">Refeição</label><select id="mt">'+MEALS.map(function(m){return '<option>'+m+'</option>'}).join('')+'</select>'+
+    '<div class="mt"><label for="mn">O que comeu</label><input id="mn" placeholder="Ex.: Arroz, frango e salada"></div>'+
+    '<div class="four mt"><div><label for="mk">Calorias (kcal)</label><input id="mk" inputmode="numeric" placeholder="0"></div><div><label for="mp">Proteína (g)</label><input id="mp" inputmode="decimal" placeholder="0"></div></div>'+
+    '<div class="btns"><button class="btn" data-act="addMeal">Salvar refeição</button></div></div>'+
+  '<div class="card"><h2>Refeições do dia</h2>'+list+'</div>'+
+  '<div class="card"><h2>Calorias nos últimos 7 dias</h2><div class="wk">'+bars+'</div></div>';
+}
+
+function vCorpo(){
+  var pts=series(metric),first=pts[0],last=pts[pts.length-1];
+  var chips=Object.keys(METRICS).map(function(k){return '<button class="chip'+(k===metric?' on':'')+'" data-act="metric" data-m="'+k+'">'+METRICS[k][0]+'</button>'}).join('');
+  var sumTxt='';
+  if(last){
+    sumTxt='<div class="big">'+fmt(last.v)+' <small>'+METRICS[metric][1]+'</small></div>';
+    if(pts.length>1){var dl=last.v-first.v;sumTxt+='<p class="muted" style="margin:6px 0 8px">'+(dl>0?'+':dl<0?'−':'')+fmt(Math.abs(dl))+' '+METRICS[metric][1]+' desde '+fmtFull(first.d)+'</p>'}
+  }
+  var rows=bodySorted().reverse().map(function(b){
+    var parts=Object.keys(METRICS).filter(function(k){return b[k]!=null}).map(function(k){return METRICS[k][0]+' '+fmt(b[k])+' '+METRICS[k][1]});
+    return '<div class="item"><div><b>'+fmtFull(b.d)+'</b><div class="muted">'+parts.join(' · ')+'</div></div><button class="x" data-act="delBody" data-d="'+b.d+'" aria-label="Excluir medida">×</button></div>';
+  }).join('')||'<p class="empty">Suas medidas salvas aparecem aqui.</p>';
+  return '<h1>Corpo</h1><p class="sub">Peso, gordura, massa muscular e medidas.</p>'+
+  '<div class="card"><h2>Evolução</h2><div class="chips">'+chips+'</div>'+sumTxt+chart(pts)+'</div>'+
+  '<div class="card"><h2>Nova medida</h2>'+
+    '<label for="bd">Data</label><input id="bd" type="date" value="'+todayStr()+'">'+
+    '<div class="three mt"><div><label for="b-weight">Peso (kg)</label><input id="b-weight" inputmode="decimal"></div><div><label for="b-fat">Gordura (%)</label><input id="b-fat" inputmode="decimal"></div><div><label for="b-muscle">Massa musc. (kg)</label><input id="b-muscle" inputmode="decimal"></div></div>'+
+    '<div class="three mt"><div><label for="b-waist">Cintura (cm)</label><input id="b-waist" inputmode="decimal"></div><div><label for="b-hip">Quadril (cm)</label><input id="b-hip" inputmode="decimal"></div><div><label for="b-arm">Braço (cm)</label><input id="b-arm" inputmode="decimal"></div></div>'+
+    '<div class="three mt"><div><label for="b-thigh">Coxa (cm)</label><input id="b-thigh" inputmode="decimal"></div></div>'+
+    '<p class="muted" style="margin:10px 0 0">Preencha só o que medir hoje.</p>'+
+    '<div class="btns"><button class="btn" data-act="addBody">Salvar medidas</button></div></div>'+
+  '<div class="card"><h2>Histórico</h2>'+rows+'</div>';
+}
+
+function vFotos(){
+  var list=photos.filter(function(p){return pFilter==='todas'||p.type===pFilter}).sort(function(a,b){return b.date.localeCompare(a.date)||b.id.localeCompare(a.id)});
+  var fchips=['todas'].concat(Object.keys(PTYPES)).map(function(k){return '<button class="chip'+(k===pFilter?' on':'')+'" data-act="pfilter" data-f="'+k+'">'+(k==='todas'?'Todas':PTYPES[k])+'</button>'}).join('');
+  var grid=list.length?'<div class="grid">'+list.map(function(p){return '<button data-act="openP" data-id="'+p.id+'" aria-label="Foto de '+fmtFull(p.date)+'"><img src="'+p.img+'" alt="Foto de '+PTYPES[p.type]+' em '+fmtFull(p.date)+'"><em>'+fmtDate(p.date)+'</em></button>'}).join('')+'</div>':'<p class="empty">Nenhuma foto aqui ainda.</p>';
+  var asc=list.slice().reverse(),cmp='';
+  if(asc.length>1){
+    var a=asc[0],b=asc[asc.length-1];
+    cmp='<div class="card"><h2>Antes e depois</h2><div class="cmp"><div><img src="'+a.img+'" alt="Primeira foto"></div><div><img src="'+b.img+'" alt="Foto mais recente"></div></div>'+
+      '<div class="cmp"><p>Primeira: '+fmtFull(a.date)+'</p><p>Mais recente: '+fmtFull(b.date)+'</p></div></div>';
+  }
+  var tsel=Object.keys(PTYPES).map(function(k){return '<option value="'+k+'"'+(k===pType?' selected':'')+'>'+PTYPES[k]+'</option>'}).join('');
+  return '<h1>Fotos</h1><p class="sub">Registre o corpo e compare a evolução.</p>'+
+  '<div class="card"><h2>Nova foto</h2><label for="pt">Tipo</label><select id="pt" data-ptype="1">'+tsel+'</select>'+
+    '<div class="btns"><label class="btn">Tirar foto<input class="vh" type="file" accept="image/*" capture data-photo="1"></label>'+
+    '<label class="btn alt">Escolher da galeria<input class="vh" type="file" accept="image/*" multiple data-photo="1"></label></div></div>'+
+  cmp+
+  '<div class="card"><h2>Galeria</h2><div class="chips">'+fchips+'</div>'+grid+'</div>';
+}
+
+function render(){
+  var v={hoje:vHoje,treino:vTreino,comida:vComida,corpo:vCorpo,fotos:vFotos}[tab];
+  $('#app').innerHTML=v();
+  document.querySelectorAll('#nav button').forEach(function(b){b.classList.toggle('on',b.dataset.tab===tab)});
+}
+
+/* ---------- ações ---------- */
+function lastLoad(name){
+  var n=name.trim().toLowerCase();if(!n)return '';
+  var ws=S.workouts.slice().sort(function(a,b){return b.date.localeCompare(a.date)});
+  for(var i=0;i<ws.length;i++){
+    for(var j=0;j<ws[i].exercises.length;j++){
+      var e=ws[i].exercises[j];
+      if(e.name.toLowerCase()===n)return 'Última vez ('+fmtDate(ws[i].date)+'): '+e.sets+' × '+e.reps+(e.kg?' com '+fmt(e.kg)+' kg':'');
+    }
+  }
+  return '';
+}
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act],[data-tab]');if(!b)return;
+  if(b.dataset.tab){tab=b.dataset.tab;render();window.scrollTo(0,0);return}
+  var a=b.dataset.act,t=todayStr();
+  if(a==='closeM'){if(e.target===b)closeModal();return}
+  if(a==='water'){S.water[t]=Math.max(0,(S.water[t]||0)+(+b.dataset.ml));save();render();return}
+  if(a==='addEx'){
+    var name=$('#en').value.trim(),sets=num($('#es').value),reps=num($('#er').value),kg=num($('#ek').value);
+    if(!name||!sets||!reps){toast('Informe exercício, séries e repetições');return}
+    draft.exercises.push({name:name,sets:sets,reps:reps,kg:kg||0});render();return;
+  }
+  if(a==='delEx'){draft.exercises.splice(+b.dataset.i,1);render();return}
+  if(a==='saveW'){
+    if(!draft.exercises.length){toast('Adicione ao menos um exercício');return}
+    S.workouts.push({id:uid(),date:draft.date||t,title:draft.title.trim()||'Treino',exercises:draft.exercises});save();
+    draft={title:'',date:t,exercises:[]};toast('Treino salvo');render();return;
+  }
+  if(a==='delW'){S.workouts=S.workouts.filter(function(w){return w.id!==b.dataset.id});save();render();return}
+  if(a==='addMeal'){
+    var kc=num($('#mk').value),pr=num($('#mp').value),nm=$('#mn').value.trim();
+    if(!nm&&kc==null){toast('Descreva a refeição ou informe as calorias');return}
+    var d=new Date();
+    S.meals.push({id:uid(),date:mealDate,time:pad(d.getHours())+':'+pad(d.getMinutes()),type:$('#mt').value,name:nm,kcal:kc||0,prot:pr||0});save();toast('Refeição salva');render();return;
+  }
+  if(a==='delMeal'){S.meals=S.meals.filter(function(m){return m.id!==b.dataset.id});save();render();return}
+  if(a==='metric'){metric=b.dataset.m;render();return}
+  if(a==='addBody'){
+    var date=$('#bd').value||t,rec=null,any=false;
+    S.body.forEach(function(x){if(x.d===date)rec=x});
+    if(!rec){rec={d:date}}
+    Object.keys(METRICS).forEach(function(k){var v=num($('#b-'+k).value);if(v!=null){rec[k]=v;any=true}});
+    if(!any){toast('Preencha ao menos uma medida');return}
+    if(S.body.indexOf(rec)<0)S.body.push(rec);
+    save();toast('Medidas salvas');render();return;
+  }
+  if(a==='delBody'){S.body=S.body.filter(function(x){return x.d!==b.dataset.d});save();render();return}
+  if(a==='pfilter'){pFilter=b.dataset.f;render();return}
+  if(a==='openP'){
+    var p=photos.filter(function(x){return x.id===b.dataset.id})[0];if(!p)return;
+    showModal('<img src="'+p.img+'" alt="Foto"><div class="row"><div class="grow"><label for="pd">Data</label><input id="pd" type="date" value="'+p.date+'"></div><div class="grow"><label for="pk">Tipo</label><select id="pk">'+Object.keys(PTYPES).map(function(k){return '<option value="'+k+'"'+(k===p.type?' selected':'')+'>'+PTYPES[k]+'</option>'}).join('')+'</select></div></div>'+
+      '<div class="mt"><label for="pn">Anotação</label><input id="pn" value="'+esc(p.note||'')+'" placeholder="Ex.: 8 semanas de treino"></div>'+
+      '<div class="btns"><button class="btn" data-act="saveP" data-id="'+p.id+'">Salvar</button><button class="btn ghost" data-act="delP" data-id="'+p.id+'">Excluir foto</button><button class="btn ghost" data-act="closeM">Fechar</button></div>');
+    return;
+  }
+  if(a==='saveP'){
+    var q=photos.filter(function(x){return x.id===b.dataset.id})[0];if(!q)return;
+    q.date=$('#pd').value||q.date;q.type=$('#pk').value;q.note=$('#pn').value.trim();
+    idb('readwrite',function(s){return s.put(q)}).then(function(){closeModal();toast('Foto atualizada');render()}).catch(function(){toast('Não foi possível salvar a foto')});
+    return;
+  }
+  if(a==='delP'){
+    if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Toque de novo para excluir';return}
+    var id=b.dataset.id;
+    idb('readwrite',function(s){return s.delete(id)}).then(function(){photos=photos.filter(function(x){return x.id!==id});closeModal();toast('Foto excluída');render()}).catch(function(){toast('Não foi possível excluir')});
+    return;
+  }
+  if(a==='backup'){
+    showModal('<h2>Backup dos dados</h2><p class="muted">Inclui treinos, comida, água, medidas e metas. As fotos ficam só neste aparelho e não entram no backup.</p>'+
+      '<textarea id="bk" rows="5" readonly>'+esc(JSON.stringify(S))+'</textarea>'+
+      '<div class="btns"><button class="btn" data-act="copyBk">Copiar backup</button></div>'+
+      '<h2 class="mt" style="margin-top:20px">Restaurar</h2><textarea id="rs" rows="4" placeholder="Cole aqui um backup para restaurar"></textarea>'+
+      '<div class="btns"><button class="btn alt" data-act="restoreBk">Restaurar dados</button><button class="btn ghost" data-act="closeM">Fechar</button></div>');
+    return;
+  }
+  if(a==='copyBk'){
+    var ta=$('#bk');
+    var fallback=function(){ta.select();try{document.execCommand('copy');toast('Backup copiado')}catch(x){toast('Selecione o texto e copie')}};
+    try{navigator.clipboard.writeText(ta.value).then(function(){toast('Backup copiado')},fallback)}catch(x){fallback()}
+    return;
+  }
+  if(a==='restoreBk'){
+    try{
+      var o=JSON.parse($('#rs').value);
+      if(!o||typeof o!=='object'||!Array.isArray(o.workouts))throw new Error('x');
+      S=normalize(o);save();closeModal();toast('Dados restaurados');render();
+    }catch(x){toast('Backup inválido')}
+    return;
+  }
+  if(a==='resetAll'){
+    if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Toque de novo para apagar tudo';return}
+    S=normalize({});save();
+    idb('readwrite',function(s){return s.clear()}).catch(function(){}).then(function(){photos=[];toast('Dados apagados');render()});
+    return;
+  }
+});
+
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.dataset.draft){draft[t.dataset.draft]=t.value}
+  if(t.id==='en'){var h=$('#hint');if(h)h.textContent=lastLoad(t.value)}
+});
+
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.dataset.goal){var n=num(t.value);if(n&&n>0){S.goals[t.dataset.goal]=n;save();toast('Meta atualizada')}render();return}
+  if(t.dataset.mealdate){mealDate=t.value||todayStr();render();return}
+  if(t.dataset.ptype){pType=t.value;return}
+  if(t.dataset.photo&&t.files&&t.files.length){
+    var files=Array.prototype.slice.call(t.files);t.value='';
+    toast('Salvando foto...');
+    Promise.all(files.map(function(f){
+      return compress(f).then(function(img){
+        var p={id:uid(),date:todayStr(),type:pType,note:'',img:img};
+        return idb('readwrite',function(s){return s.put(p)}).then(function(){photos.push(p)});
+      });
+    })).then(function(){toast('Foto salva');render()}).catch(function(){toast('Não foi possível salvar a foto')});
+  }
+});
+
+load();render();
+loadPhotos().then(function(){if(tab==='fotos')render()});
+})();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+}
+</script>
+</body>
+</html>
